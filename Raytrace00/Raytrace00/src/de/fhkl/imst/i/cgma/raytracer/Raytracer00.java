@@ -4,13 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Vector;
+
+import javax.imageio.ImageIO;
 
 import de.fhkl.imst.i.cgma.raytracer.file.I_Sphere;
 import de.fhkl.imst.i.cgma.raytracer.file.RTFile;
@@ -25,6 +26,12 @@ public class Raytracer00 implements IRayTracerImplementation {
     private float fovyDegree;
     private float near;
     private float fovyRadians;
+    
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private ImageTexture texture;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
  // one hardcoded point light as a minimal solution :-(
     private float[] Ia = { 0.25f, 0.25f, 0.25f }; // ambient light color
@@ -48,6 +55,21 @@ public class Raytracer00 implements IRayTracerImplementation {
 	    gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel1.dat")));
 	    gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel2.dat")));
 	    gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel3.dat")));
+	    
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    try {
+			
+			Image img = ImageIO.read(new FileInputStream(directory+"/data/pic.jpg"));
+			
+			texture = new ImageTexture(img, img.getWidth(null), img.getHeight(null));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
+	    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	    objects = gui.getObjects();
 
@@ -57,11 +79,14 @@ public class Raytracer00 implements IRayTracerImplementation {
     }
 
     public void setViewParameters(float fovyDegree, float near) {
+    	// set attributes fovyDegree, fovyRadians, near
     	this.near = near;
     	this.fovyDegree = fovyDegree;
-    	this.fovyRadians = (float) Math.toRadians((double) fovyDegree);
+    	//Alternative: this.fovyRadians = (2* 360 * 1 * (fovyDegree/360)); // 2* Pi*r * (alpha/360) = radiant = Teil des Umfangs
+    	this.fovyRadians = (float) (2* Math.toRadians((double) fovyDegree/2));
 	    
-	    resx = gui.getResX();
+    	// set attributes resx, resy, aspect
+	    resx = gui.getResX(); //aufloesung auf dem Bildschirm
 	    resy = gui.getResY();
 
 	    aspect = (float) resx / resy;
@@ -81,7 +106,6 @@ public class Raytracer00 implements IRayTracerImplementation {
     	float rayEx, rayEy, rayEz;
     	float rayVx, rayVy, rayVz;
     	
-    	
     	// prepare mesh data (normals and areas)
     	prepareMeshData();
 
@@ -90,7 +114,9 @@ public class Raytracer00 implements IRayTracerImplementation {
     	rayEx = 0.0f;
     	rayEy = 0.0f;
     	rayEz = 0.0f;
+    	
     	z = -near;
+    	
     	Color color;
     	
     	// prepare mesh data for shading
@@ -138,7 +164,7 @@ public class Raytracer00 implements IRayTracerImplementation {
 	
     }
     
-    public static BufferedImage scale(BufferedImage sbi, int imageType, int dWidth, int dHeight, double fWidth, double fHeight) {
+   public static BufferedImage scale(BufferedImage sbi, int imageType, int dWidth, int dHeight, double fWidth, double fHeight) {
         BufferedImage dbi = null;
         if(sbi != null) {
             dbi = new BufferedImage(dWidth, dHeight, imageType);
@@ -444,12 +470,6 @@ public class Raytracer00 implements IRayTracerImplementation {
 
 
         }
-
-    public static void main(String[] args) {
-	Raytracer00 rt = new Raytracer00();
-
-	// rt.doRayTrace();
-    }
     
     private Color phongIlluminate(float[] material, float materialN, float[] l, float[] n, float[] v, float[] Ia, float[] Ids) {
     	float ir = 0, ig = 0, ib = 0; // reflected intensity, rgb channels
@@ -875,4 +895,12 @@ public class Raytracer00 implements IRayTracerImplementation {
     	}
     	System.out.println("Vorverarbeitung 2 beendet");
         }
+        
+
+public static void main(String[] args) {
+	Raytracer00 rt = new Raytracer00();
+
+	// rt.doRayTrace();
+   }
+
 }
