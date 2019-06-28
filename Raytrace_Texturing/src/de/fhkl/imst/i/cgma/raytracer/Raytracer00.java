@@ -9,18 +9,18 @@ import java.io.IOException;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
-import javax.media.j3d.Appearance;
-import javax.media.j3d.BranchGroup;
-import javax.media.j3d.ImageComponent2D;
-import javax.media.j3d.Material;
-import javax.media.j3d.TexCoordGeneration;
-import javax.media.j3d.Texture2D;
-import javax.media.j3d.TextureAttributes;
-import javax.media.j3d.TransformGroup;
+//import javax.media.j3d.Appearance;
+//import javax.media.j3d.BranchGroup;
+//import javax.media.j3d.ImageComponent2D;
+//import javax.media.j3d.Material;
+//import javax.media.j3d.TexCoordGeneration;
+//import javax.media.j3d.Texture2D;
+//import javax.media.j3d.TextureAttributes;
+//import javax.media.j3d.TransformGroup;
 
-import com.sun.j3d.utils.geometry.Sphere;
-import com.sun.j3d.utils.image.TextureLoader;
-import com.sun.j3d.utils.universe.SimpleUniverse;
+//import com.sun.j3d.utils.geometry.Sphere;
+//import com.sun.j3d.utils.image.TextureLoader;
+//import com.sun.j3d.utils.universe.SimpleUniverse;
 
 import de.fhkl.imst.i.cgma.raytracer.file.I_Sphere;
 import de.fhkl.imst.i.cgma.raytracer.file.RTFile;
@@ -36,13 +36,13 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.media.j3d.*;
+//import javax.media.j3d.*;
 import javax.swing.JFrame;
-import javax.vecmath.*;
-import com.sun.j3d.utils.geometry.*;
-import com.sun.j3d.utils.universe.*;
-import com.sun.j3d.utils.behaviors.vp.*;
-import com.sun.j3d.utils.image.*;
+//import javax.vecmath.*;
+//import com.sun.j3d.utils.geometry.*;
+//import com.sun.j3d.utils.universe.*;
+//import com.sun.j3d.utils.behaviors.vp.*;
+//import com.sun.j3d.utils.image.*;
 
 public class Raytracer00 implements IRayTracerImplementation {
 	// viewing volume with infinite end
@@ -69,14 +69,14 @@ public class Raytracer00 implements IRayTracerImplementation {
 	private Raytracer00() {
 		try {
 
-			//gui.addObject(RTFileReader.read(I_Sphere.class, new File("data/ikugel.dat"))); //implizit kugel lesen
-			//gui.addObject(RTFileReader.read(T_Mesh.class, new File("data/dreieck1.dat")));
+			gui.addObject(RTFileReader.read(I_Sphere.class, new File("data/ikugel.dat"))); //implizit kugel lesen
+			gui.addObject(RTFileReader.read(T_Mesh.class, new File("data/dreieck1.dat")));
 			String directory = System.getProperty("user.dir");
 		    gui.addObject(RTFileReader.read(I_Sphere.class, new File(directory+"/data/ikugel2.dat")));
-		   // gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/dreiecke2.dat")));
-		   // gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel1.dat")));
-		   // gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel2.dat")));
-		   // gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel3.dat")));
+		    gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/dreiecke2.dat")));
+		    gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel1.dat")));
+		    gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel2.dat")));
+		    gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel3.dat")));
 
 		   
 		   
@@ -156,7 +156,7 @@ public class Raytracer00 implements IRayTracerImplementation {
 				gui.updateSTime(); // neu
 				// for demo purposes
 
-				//gui.setPixel(xp, yp, new Color(rd.nextFloat(), rd.nextFloat(), rd.nextFloat()).getRGB());
+				// gui.setPixel(xp, yp, new Color(rd.nextFloat(), rd.nextFloat(), rd.nextFloat()).getRGB());
 
 				// x, y: view coordinates //Koordinaten der punkte in der Bildebene
 				x = ( (float) xp /(this.resx-1) )* this.w - (this.w/2); //float casten, sonst rechnet er normale div und schneidet hinten ab
