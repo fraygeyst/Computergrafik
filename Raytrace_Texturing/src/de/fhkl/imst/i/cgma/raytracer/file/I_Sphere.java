@@ -42,12 +42,6 @@ public class I_Sphere extends RT_Object {
 	
 	@Override
 	public void calcBoundingBox() {
-		min[0] = center[0] - radius;
-		min[1] = center[1] - radius;
-		min[2] = center[2] - radius;
-		max[0] = center[0] + radius;
-		max[1] = center[1] + radius;
-		max[2] = center[2] + radius;
 	}
 
 	private static final String materialRegex =

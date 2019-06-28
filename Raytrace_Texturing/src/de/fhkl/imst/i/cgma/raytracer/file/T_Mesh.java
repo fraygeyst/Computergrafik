@@ -22,7 +22,6 @@ public class T_Mesh extends RT_Object {
     public float[][] vertexColors; 
     
     public float[][] triangleNormals;
-    public float[][] triangleNormals2;
     public float[][] triangleColors;
     public float[] triangleAreas;
 	
@@ -92,22 +91,6 @@ public class T_Mesh extends RT_Object {
 	
 	@Override
 	public void calcBoundingBox() {
-		min[0] = vertices[0][0];
-		min[1] = vertices[0][1];
-		min[2] = vertices[0][2];
-		max[0] = vertices[0][0];
-		max[1] = vertices[0][1];
-		max[2] = vertices[0][2];
-		for(int i = 0; i < vertices.length; i++) {
-			for(int x = 0; x < 3; x++) {
-				if(min[x] > vertices[i][x]) {
-					min[x] = vertices[i][x];
-				}
-				if(max[x] < vertices[i][x]) {
-					max[x] = vertices[i][x];
-				}
-			}
-		}
 	}
 	
 	private static final String fInfoRegex =
