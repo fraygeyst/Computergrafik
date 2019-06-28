@@ -185,8 +185,8 @@ public class Raytracer00 implements IRayTracerImplementation {
 				// get color or null along the ray
 				color = traceRayAndGetColor(rayEx, rayEy,rayEz,  rayVx, rayVy,  rayVz);
 				if (color!=null) {  //set pixel with color
-					//gui.setPixel(xp, yp, texture.getTexel(x, y).toRGB());
-					gui.setPixel(xp, yp, color.getRGB());
+					gui.setPixel(xp, yp, texture.getTexel(x, y).toRGB());
+					//gui.setPixel(xp, yp, color.getRGB());
 				}else {
 					gui.setPixel(xp, yp, Color.BLACK.getRGB());
 				}
@@ -244,17 +244,11 @@ public class Raytracer00 implements IRayTracerImplementation {
 				
 				
 				
-				
-				
-				
-				
 				float t;
 
 				// no bounding box hit? -> next object
 				if (bboxHit(sphere, rayEx, rayEy, rayEz, rayVx, rayVy, rayVz))
 					continue;
-
-
 
 				// ray intersection uses quadratic equation
 				float a, b, c, d;
@@ -267,8 +261,6 @@ public class Raytracer00 implements IRayTracerImplementation {
 				c =   (rayEx - sphere.center[0]) * (rayEx - sphere.center[0])
 						+ (rayEy - sphere.center[1]) * (rayEy - sphere.center[1]) 
 						+ (rayEz - sphere.center[2]) * (rayEz - sphere.center[2]) - (sphere.radius * sphere.radius);
-
-
 
 
 
@@ -290,10 +282,7 @@ public class Raytracer00 implements IRayTracerImplementation {
 
 				// calculate first intersection point with sphere along the
 				// ray
-				t = (float)(-b - Math.sqrt(d)) / (2*a);
-
-				
-				
+				t = (float)(-b - Math.sqrt(d)) / (2*a);		
 				
 				
 				
@@ -339,7 +328,6 @@ public class Raytracer00 implements IRayTracerImplementation {
 				// no bounding box hit? -> next object
 				if (bboxHit(mesh, rayEx, rayEy, rayEz, rayVx, rayVy, rayVz))
 					continue;
-
 
 
 				float a, rayVn, pen;
@@ -470,9 +458,6 @@ public class Raytracer00 implements IRayTracerImplementation {
 			    } else
 				continue; // return null;
 			}
-
-
-
 
 
 
@@ -741,16 +726,9 @@ public class Raytracer00 implements IRayTracerImplementation {
 		fn[2] = ax*by - ay*bx;
 
 
-
-
 		// normalize n, calculate and return area of triangle
 		return normalize(fn) / 2;
 	}
-
-
-
-
-
 
 	// calculate triangle test
 	// is p (the intersection point with the plane through p1, p2 and p3) inside
@@ -776,11 +754,6 @@ public class Raytracer00 implements IRayTracerImplementation {
 
 		return false;
 	}
-
-
-
-
-
 
 	// calculate bounding box test
 	// decides whether the ray s(t)=rayE+t*rayV intersects the axis aligned
@@ -888,11 +861,6 @@ public class Raytracer00 implements IRayTracerImplementation {
 	}
 
 
-
-
-
-
-
 	// calculate phong illumination model with material parameters material and
 	// materialN, light vector l, normal vector n, viewing vector v, ambient
 	// light Ia, diffuse and specular light Ids
@@ -955,8 +923,6 @@ public class Raytracer00 implements IRayTracerImplementation {
 
 		return l;
 	}
-
-
 
 	public static void main(String[] args) {
 		Raytracer00 rt = new Raytracer00();
