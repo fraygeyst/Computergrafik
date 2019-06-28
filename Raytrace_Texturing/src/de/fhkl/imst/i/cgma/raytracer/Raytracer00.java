@@ -78,8 +78,7 @@ public class Raytracer00 implements IRayTracerImplementation {
 		    gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel2.dat")));
 		    gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel3.dat")));
 
-		   
-		   
+		   		   
 				try {
 					
 					Image img = ImageIO.read(new FileInputStream(directory+"/data/pic.jpg"));
@@ -178,8 +177,6 @@ public class Raytracer00 implements IRayTracerImplementation {
 					//System.out.println("rayVy: "+ rayVy);
 					//System.out.println("rayVz: "+ rayVz);
 				} */ 
-
-				
 				
 
 				// get color or null along the ray
