@@ -9,18 +9,18 @@ import java.io.IOException;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
-//import javax.media.j3d.Appearance;
-//import javax.media.j3d.BranchGroup;
-//import javax.media.j3d.ImageComponent2D;
-//import javax.media.j3d.Material;
-//import javax.media.j3d.TexCoordGeneration;
-//import javax.media.j3d.Texture2D;
-//import javax.media.j3d.TextureAttributes;
-//import javax.media.j3d.TransformGroup;
+import javax.media.j3d.Appearance;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.ImageComponent2D;
+import javax.media.j3d.Material;
+import javax.media.j3d.TexCoordGeneration;
+import javax.media.j3d.Texture2D;
+import javax.media.j3d.TextureAttributes;
+import javax.media.j3d.TransformGroup;
 
-//import com.sun.j3d.utils.geometry.Sphere;
-//import com.sun.j3d.utils.image.TextureLoader;
-//import com.sun.j3d.utils.universe.SimpleUniverse;
+import com.sun.j3d.utils.geometry.Sphere;
+import com.sun.j3d.utils.image.TextureLoader;
+import com.sun.j3d.utils.universe.SimpleUniverse;
 
 import de.fhkl.imst.i.cgma.raytracer.file.I_Sphere;
 import de.fhkl.imst.i.cgma.raytracer.file.RTFile;
@@ -36,15 +36,15 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-//import javax.media.j3d.*;
+import javax.media.j3d.*;
 import javax.swing.JFrame;
-//import javax.vecmath.*;
-//import com.sun.j3d.utils.geometry.*;
-//import com.sun.j3d.utils.universe.*;
-//import com.sun.j3d.utils.behaviors.vp.*;
-//import com.sun.j3d.utils.image.*;
+import javax.vecmath.*;
+import com.sun.j3d.utils.geometry.*;
+import com.sun.j3d.utils.universe.*;
+import com.sun.j3d.utils.behaviors.vp.*;
+import com.sun.j3d.utils.image.*;
 
-public class Raytracer00 implements IRayTracerImplementation {
+public class Raytracer_Texturing implements IRayTracerImplementation {
 	// viewing volume with infinite end
 	private float fovyDegree;
 	private float near;
@@ -66,7 +66,7 @@ public class Raytracer00 implements IRayTracerImplementation {
 
 	Vector<RT_Object> objects;
 
-	private Raytracer00() {
+	private Raytracer_Texturing() {
 		try {
 
 			gui.addObject(RTFileReader.read(I_Sphere.class, new File("data/ikugel.dat"))); //implizit kugel lesen
@@ -925,7 +925,7 @@ public class Raytracer00 implements IRayTracerImplementation {
 	}
 
 	public static void main(String[] args) {
-		Raytracer00 rt = new Raytracer00();
+		Raytracer_Texturing rt = new Raytracer_Texturing();
 
 		// rt.doRayTrace();
 	}
