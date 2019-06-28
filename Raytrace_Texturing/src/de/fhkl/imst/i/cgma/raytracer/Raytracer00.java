@@ -2,12 +2,25 @@ package de.fhkl.imst.i.cgma.raytracer;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
+import javax.media.j3d.Appearance;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.ImageComponent2D;
+import javax.media.j3d.Material;
+import javax.media.j3d.TexCoordGeneration;
+import javax.media.j3d.Texture2D;
+import javax.media.j3d.TextureAttributes;
+import javax.media.j3d.TransformGroup;
+
+import com.sun.j3d.utils.geometry.Sphere;
+import com.sun.j3d.utils.image.TextureLoader;
+import com.sun.j3d.utils.universe.SimpleUniverse;
 
 import de.fhkl.imst.i.cgma.raytracer.file.I_Sphere;
 import de.fhkl.imst.i.cgma.raytracer.file.RTFile;
@@ -17,6 +30,19 @@ import de.fhkl.imst.i.cgma.raytracer.file.T_Mesh;
 import de.fhkl.imst.i.cgma.raytracer.gui.IRayTracerImplementation;
 import de.fhkl.imst.i.cgma.raytracer.gui.RayTracerGui;
 import de.fhkl.imst.i.texture.ImageTexture;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.media.j3d.*;
+import javax.swing.JFrame;
+import javax.vecmath.*;
+import com.sun.j3d.utils.geometry.*;
+import com.sun.j3d.utils.universe.*;
+import com.sun.j3d.utils.behaviors.vp.*;
+import com.sun.j3d.utils.image.*;
 
 public class Raytracer00 implements IRayTracerImplementation {
 	// viewing volume with infinite end
@@ -43,14 +69,14 @@ public class Raytracer00 implements IRayTracerImplementation {
 	private Raytracer00() {
 		try {
 
-			gui.addObject(RTFileReader.read(I_Sphere.class, new File("data/ikugel.dat"))); //implizit kugel lesen
-			gui.addObject(RTFileReader.read(T_Mesh.class, new File("data/dreieck1.dat")));
+			//gui.addObject(RTFileReader.read(I_Sphere.class, new File("data/ikugel.dat"))); //implizit kugel lesen
+			//gui.addObject(RTFileReader.read(T_Mesh.class, new File("data/dreieck1.dat")));
 			String directory = System.getProperty("user.dir");
 		    gui.addObject(RTFileReader.read(I_Sphere.class, new File(directory+"/data/ikugel2.dat")));
-		    gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/dreiecke2.dat")));
-		    gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel1.dat")));
-		    gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel2.dat")));
-		    gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel3.dat")));
+		   // gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/dreiecke2.dat")));
+		   // gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel1.dat")));
+		   // gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel2.dat")));
+		   // gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel3.dat")));
 
 		   
 		   
@@ -214,6 +240,12 @@ public class Raytracer00 implements IRayTracerImplementation {
 			// object is an implicit sphere?
 			if (scene instanceof I_Sphere) {
 				sphere = (I_Sphere) scene;
+
+				
+				
+				
+				
+				
 				
 				
 				float t;
@@ -238,6 +270,8 @@ public class Raytracer00 implements IRayTracerImplementation {
 
 
 
+
+
 				// positive discriminant determines intersection
 				d = b*b - 4*a*c;
 
@@ -257,6 +291,8 @@ public class Raytracer00 implements IRayTracerImplementation {
 				// calculate first intersection point with sphere along the
 				// ray
 				t = (float)(-b - Math.sqrt(d)) / (2*a);
+
+				
 				
 				
 				
@@ -373,12 +409,12 @@ public class Raytracer00 implements IRayTracerImplementation {
 					case 'f':
 					case 'F':
 
-						// the normal is the surface normal 
+//						// the normal is the surface normal 
 //						minN[0] = n[0];
 //						minN[1] = n[1]; 
 //						minN[2] = n[2];
 //
-						// the material is the material of the first triangle point 
+//						// the material is the material of the first triangle point 
 //						int matIndex = mesh.verticesMat[mesh.triangles[minIndex][0]];
 //						minMaterial = mesh.materials[matIndex]; 
 //						minMaterialN= mesh.materialsN[matIndex];
@@ -462,12 +498,10 @@ public class Raytracer00 implements IRayTracerImplementation {
 			switch (mesh.fgp) {
 			case 'f':
 			case 'F':
-				
-				// illumination can be calculated here
-				// this is a variant between flat und phong shading
-				// return phongIlluminate(minMaterial, minMaterialN, l, minN, v, Ia, Ids);
+//				// illumination can be calculated here
+//				// this is a variant between flat und phong shading
+//				return phongIlluminate(minMaterial, minMaterialN, l, minN, v, Ia, Ids);
 				// lookup triangle color of triangle hit
-				
 				return new Color(mesh.triangleColors[minIndex][0], mesh.triangleColors[minIndex][1], mesh.triangleColors[minIndex][2]);
 			    case 'g':
 			    case 'G':
@@ -493,9 +527,9 @@ public class Raytracer00 implements IRayTracerImplementation {
 			}
 			
 			return null;
-			// intermediate version
-			// Random rd = new Random();
-			// return new Color(rd.nextFloat(), rd.nextFloat(), rd.nextFloat());
+//			// intermediate version
+//			Random rd = new Random();
+//			return new Color(rd.nextFloat(), rd.nextFloat(), rd.nextFloat());
 
 		    }
 
