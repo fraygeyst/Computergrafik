@@ -5,3 +5,6 @@ IMPLICIT_SPHERE
 
 # cx cy cz    r
 0.0 1.5 -3.0  1.0
+
+#Texturindex
+1
