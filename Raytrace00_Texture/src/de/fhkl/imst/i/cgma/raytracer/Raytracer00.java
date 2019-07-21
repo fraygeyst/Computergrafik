@@ -282,7 +282,7 @@ public class Raytracer00 implements IRayTracerImplementation {
 				normalize(minN);
 
 				
-				// Hier beginnt das Texturing
+				// Texturing
 				float[] des = new float[3];
 				des[0]= minN[0];
 				des[1]= minN[1];
@@ -973,9 +973,9 @@ public class Raytracer00 implements IRayTracerImplementation {
 		ln = (l[0]*n[0]) + (l[1]*n[1]) + (l[2]*n[2]);
 
 		// ambient component, Ia*ra
-		float rSphereFloat = rSphere/256.0f;
-		float gSphereFloat = gSphere/256.0f;
-		float bSphereFloat = bSphere/256.0f;
+		float rSphereFloat = rSphere/255.0f;
+		float gSphereFloat = gSphere/255.0f;
+		float bSphereFloat = bSphere/255.0f;
 		
 		ir += Ia[0] * rSphereFloat;
 		ig += Ia[1] * gSphereFloat;
@@ -1033,7 +1033,7 @@ public class Raytracer00 implements IRayTracerImplementation {
 
 	public static void main(String[] args) {
 		Raytracer00 rt = new Raytracer00();
-		rt.getClass(); //um die Warnung wegzubekommen :D
+		rt.getClass(); //um die \"not used\" Warnung wegzubekommen :D
 		// rt.doRayTrace();
 	}
 }
