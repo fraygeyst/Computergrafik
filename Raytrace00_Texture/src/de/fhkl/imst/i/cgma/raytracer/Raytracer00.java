@@ -470,11 +470,8 @@ public class Raytracer00 implements IRayTracerImplementation {
 
 		// implicit: only phong shading available => shade=illuminate
 		if (objects.get(minObjectsIndex) instanceof I_Sphere)
-			//return phongIlluminate(minMaterial, minMaterialN, l, minN, v, Ia, Ids);
+			return phongIlluminate2(minMaterialN, l, minN, v, Ia, Ids);
 
-			//Texture
-			return new Color(rSphere, gSphere, bSphere);
-		
 		// triangle mesh: flat, gouraud or phong shading according to file data
 		else if (objects.get(minObjectsIndex).getHeader() == "TRIANGLE_MESH") {
 			mesh = ((T_Mesh) objects.get(minObjectsIndex));
@@ -925,7 +922,7 @@ public class Raytracer00 implements IRayTracerImplementation {
 		float ir = 0, ig = 0, ib = 0; // reflected intensity, rgb channels
 		float[] r = new float[3]; // reflection vector
 		float ln, rv; // scalar products <l,n> and <r,v>
-
+		
 		// <l,n>
 		ln = (l[0]*n[0]) + (l[1]*n[1]) + (l[2]*n[2]);
 
@@ -933,7 +930,7 @@ public class Raytracer00 implements IRayTracerImplementation {
 		ir += Ia[0] * material[0];
 		ig += Ia[1] * material[1];
 		ib += Ia[2] * material[2];
-
+		
 		// diffuse component, Ids*rd*<l,n>
 		if (ln > 0) {
 			ir += Ids[0] * material[3] * ln;
@@ -965,6 +962,58 @@ public class Raytracer00 implements IRayTracerImplementation {
 		return new Color(ir, ig, ib);
 	}
 
+	
+	
+	private Color phongIlluminate2(float materialN, float[] l, float[] n, float[] v, float[] Ia, float[] Ids) {
+		float ir = 0, ig = 0, ib = 0; // reflected intensity, rgb channels
+		float[] r = new float[3]; // reflection vector
+		float ln, rv; // scalar products <l,n> and <r,v>
+
+		// <l,n>
+		ln = (l[0]*n[0]) + (l[1]*n[1]) + (l[2]*n[2]);
+
+		// ambient component, Ia*ra
+		float rSphereFloat = rSphere/256.0f;
+		float gSphereFloat = gSphere/256.0f;
+		float bSphereFloat = bSphere/256.0f;
+		
+		ir += Ia[0] * rSphereFloat;
+		ig += Ia[1] * gSphereFloat;
+		ib += Ia[2] * bSphereFloat;
+
+		// diffuse component, Ids*rd*<l,n>
+		if (ln > 0) {
+			ir += Ids[0] * rSphereFloat * ln;
+			ig += Ids[1] * gSphereFloat * ln;
+			ib += Ids[2] * bSphereFloat * ln;
+			
+			// reflection vector r=2*<l,n>*n-l
+			r[0] = 2 * ln * n[0] - l[0];
+			r[1] = 2 * ln * n[1] - l[1];
+			r[2] = 2 * ln * n[2] - l[2];
+
+			// <r,v>
+			rv = (r[0]*v[0]) + (r[1]*v[1]) + (r[2]*v[2]);
+
+			// specular component, Ids*rs*<r,v>^n
+			if (rv > 0) {
+				float pow = materialN;
+				ir += Ids[0] * rSphereFloat * Math.pow(rv, pow);
+				ig += Ids[1] * gSphereFloat * Math.pow(rv, pow);
+				ib += Ids[2] * bSphereFloat * Math.pow(rv, pow);
+			}
+		}
+
+		ir = ir > 1.0 ? 1.0f : ir;
+		ig = ig > 1.0 ? 1.0f : ig;
+		ib = ib > 1.0 ? 1.0f : ib;
+
+		//System.out.println(ir+" "+ig+" "+ib);
+		return new Color(ir, ig, ib);
+	}
+	
+	
+	
 	// vector normalization
 	// CAUTION: vec is an in-/output parameter; the referenced object will be
 	// altered!
