@@ -44,7 +44,7 @@ public class I_Sphere extends RT_Object {
 		matcher = pTexId.matcher(readLine(br).trim());
 		if(!matcher.matches())
 			throw new IOException("Ungültiges Dateiformat! " + br.getLineNumber());
-		tex_index= Integer.parseInt(matcher.group(1));
+		tex_index = Integer.parseInt(matcher.group(1));
 		
 		
 		calcBoundingBox();

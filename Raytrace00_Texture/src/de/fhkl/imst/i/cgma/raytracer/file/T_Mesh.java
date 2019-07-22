@@ -105,7 +105,7 @@ public class T_Mesh extends RT_Object {
 				triangles[i][j] = Integer.parseInt(matcher.group(j+1));
 		}
 
-		// UV lesen
+		// UV einlesen
 		for(int i = 0; i < nExpUV; i++) {
 			matcher = pUV.matcher(readLine(br).trim());
 			if(!matcher.matches())
@@ -120,7 +120,7 @@ public class T_Mesh extends RT_Object {
 			matcher = pTextureID.matcher(readLine(br).trim());
 			if(!matcher.matches())
 				throw new IOException("Ungültiges Dateiformat! " + br.getLineNumber());
-			tex_index= Integer.parseInt(matcher.group(1));
+			tex_index = Integer.parseInt(matcher.group(1));
 		}
 		
 

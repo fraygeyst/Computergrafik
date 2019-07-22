@@ -12,9 +12,7 @@ public class Texture {
 	public int[][] b;
 	public int sizeX;
 	public int sizeY;
-	public float[][] uv;
 	
-
 	public Texture(String filename) throws IOException
 	{
 		String directory = System.getProperty("user.dir");
@@ -27,16 +25,13 @@ public class Texture {
 		g = new int[this.sizeX][this.sizeY];
 		b = new int[this.sizeX][this.sizeY];
 		
-		uv = new float[this.sizeX][this.sizeY];
-		
 		for (int y=0; y < img.getHeight(); y++)
 		{
 			for(int x=0; x < img.getWidth(); x++)
 			{
-				r[x][y]=   (img.getRGB(x, y) >> 16) & 0xff;
-				g[x][y]=   (img.getRGB(x, y) >> 8) & 0xff;
-				b[x][y]=   (img.getRGB(x, y))  & 0xff;
-				uv[x][y] = (float)(x+y)/(510);
+				r[x][y] = (img.getRGB(x, y) >> 16) & 0xff;
+				g[x][y] = (img.getRGB(x, y) >> 8) & 0xff;
+				b[x][y] = (img.getRGB(x, y))  & 0xff;
 			}
 		}	
 	}
@@ -45,29 +40,20 @@ public class Texture {
 		return this.sizeX;
 	}
 	
-	public void setSizeX(int sizeX) {
-		this.sizeX = sizeX;
-	}
-	
 	public int getSizeY() {
 		return this.sizeY;
-	}
-	
-	public void setSizeY(int sizeY) {
-		this.sizeY = sizeY;
 	}
 	
 	public int getRed(int x, int y) {
 		return this.r[x][y];
 	}
 	
-	public int getGreen(int x, int  y) {
+	public int getGreen(int x, int y) {
 		return this.g[x][y];	
 	}
 	
-	public int getBlue(int x  , int  y) {
+	public int getBlue(int x, int y) {
 		return this.b[x][y];	
 	}
-	
 	
 }
