@@ -58,10 +58,11 @@ public class Raytracer00 implements IRayTracerImplementation {
 			//gui.addObject(RTFileReader.read(I_Sphere.class, new File(directory+"/data/ikugel3.dat")));
 			//gui.addObject(RTFileReader.read(I_Sphere.class, new File(directory+"/data/ikugel4.dat")));
 
-
 			//gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel1.dat")));
 			//gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel2.dat")));
 			//gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel3.dat")));
+			
+			//gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/kugel3mitT.dat"))); //Kugel3 mit Textur
 			//gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+ "/data/dreieck1.dat")));
 			//gui.addObject(RTFileReader.read(T_Mesh.class, new File(directory+"/data/dreiecke2.dat")));
 
@@ -281,27 +282,10 @@ public class Raytracer00 implements IRayTracerImplementation {
 				minN[2] = minIP[2] - sphere.center[2];
 				normalize(minN);
 
-
-				// Texturing
-				this.uSphere = (float) (0.5 +( Math.atan2(minN[2], minN[0]) / (2 *Math.PI)));
-				this.vSphere= (float) (0.5 - (Math.asin(minN[1])/Math.PI));
-
-				int sphere_tex_index = sphere.tex_index;
-
-				//wenn ein bestimmter Wert gesetzt ist, wird die Texture für ALLE I_Spheres übernommen.
-				if (this.selectedTexture != -1) {
-					sphere_tex_index = this.selectedTexture;
-				}
-
-
-				rSphere = textureArrayList.get(sphere_tex_index).getRed((int)(uSphere*textureArrayList.get(sphere_tex_index).getSizeX()),
-																		(int)(vSphere*textureArrayList.get(sphere_tex_index).getSizeY()));
-				gSphere = textureArrayList.get(sphere_tex_index).getGreen((int)(uSphere*textureArrayList.get(sphere_tex_index).getSizeX()),
-																		  (int)(vSphere*textureArrayList.get(sphere_tex_index).getSizeY()));
-				bSphere = textureArrayList.get(sphere_tex_index).getBlue((int)(uSphere*textureArrayList.get(sphere_tex_index).getSizeX()),
-																		 (int)(vSphere*textureArrayList.get(sphere_tex_index).getSizeY()));
-
-
+				//Texture
+				textureMapping(minN, sphere.tex_index);
+				//System.out.println("I_Shpere");
+				
 				// the material
 				minMaterial = sphere.material;
 				minMaterialN = sphere.materialN;
@@ -406,6 +390,8 @@ public class Raytracer00 implements IRayTracerImplementation {
 						bw = ai[2] / a; 
 
 						break;
+					case 't':
+					case 'T':
 					case 'p':
 					case 'P':
 						// the normal is barycentrically interpolated between
@@ -423,6 +409,11 @@ public class Raytracer00 implements IRayTracerImplementation {
 						normalize(nTemp);
 						minN = nTemp;
 
+						//Texturing
+						textureMapping(minN, mesh.tex_index);
+						
+						
+						
 						// intermediate version
 						// the material is not interpolated
 						// matIndex =
@@ -469,7 +460,7 @@ public class Raytracer00 implements IRayTracerImplementation {
 		// implicit: only phong shading available => shade=illuminate
 		if (objects.get(minObjectsIndex) instanceof I_Sphere)
 			//fuer Texture
-			return phongIlluminate2(minMaterialN, l, minN, v, Ia, Ids);
+			return phongIlluminateUsingTexture(minMaterialN, l, minN, v, Ia, Ids);
 
 		// triangle mesh: flat, gouraud or phong shading according to file data
 		else if (objects.get(minObjectsIndex).getHeader() == "TRIANGLE_MESH") {
@@ -477,34 +468,15 @@ public class Raytracer00 implements IRayTracerImplementation {
 			switch (mesh.fgp) {
 			case 't':
 			case 'T':
-				//TODO
-				System.out.println(mesh.tex_index);
-				int sizeX = textureArrayList.get(mesh.tex_index).getSizeX() - 1;
-				int sizeY = textureArrayList.get(mesh.tex_index).getSizeY() - 1;
-
-				int nu = (int)(Math.abs((minIP[0]/1+1))*sizeX);
-				int nv = sizeY-(int)(Math.abs((minIP[1]/1+0.5))*sizeY);
-
-				nu = nu >= sizeX ? sizeX-1 : nu;
-				nv = nv >= sizeY ? sizeY-1 : nv;
-
-
-				int col1 = textureArrayList.get(mesh.tex_index).getRed(nu,nv);
-				int col2 = textureArrayList.get(mesh.tex_index).getGreen(nu,nv);
-				int col3 = textureArrayList.get(mesh.tex_index).getBlue(nu,nv);
-
-
-				col1 = col1 >= 256 ? 255 : col1;
-				col2 = col2 >= 256 ? 255 : col2;
-				col3 = col3 >= 256 ? 255 : col3;
-
-				return new Color(col1,col2,col3);
+				//fuer Texture verwenden
+				return phongIlluminateUsingTexture(minMaterialN, l, minN, v, Ia, Ids);
 			case 'f':
 			case 'F':
 				//				// illumination can be calculated here
 				//				// this is a variant between flat und phong shading
 				//				return phongIlluminate(minMaterial, minMaterialN, l, minN, v, Ia, Ids);
 				// lookup triangle color of triangle hit
+				//System.out.println(mesh.triangleColors[minIndex][0] +","+ mesh.triangleColors[minIndex][1]+","+ mesh.triangleColors[minIndex][2]);
 				return new Color(mesh.triangleColors[minIndex][0], mesh.triangleColors[minIndex][1], mesh.triangleColors[minIndex][2]);
 			case 'g':
 			case 'G':
@@ -537,6 +509,26 @@ public class Raytracer00 implements IRayTracerImplementation {
 	}
 
 
+
+	private void textureMapping(float minN[], int tex_index) {
+		// Texturing
+		this.uSphere = (float) (0.5 +( Math.atan2(minN[2], minN[0]) / (2 *Math.PI)));
+		this.vSphere= (float) (0.5 - (Math.asin(minN[1])/Math.PI));
+
+		//wenn ein bestimmter Wert gesetzt ist, wird die Texture für ALLE I_Spheres übernommen.
+		if (this.selectedTexture != -1) {
+			tex_index = this.selectedTexture;
+		}
+
+
+		rSphere = textureArrayList.get(tex_index).getRed((int)(uSphere*textureArrayList.get(tex_index).getSizeX()),
+																(int)(vSphere*textureArrayList.get(tex_index).getSizeY()));
+		gSphere = textureArrayList.get(tex_index).getGreen((int)(uSphere*textureArrayList.get(tex_index).getSizeX()),
+																  (int)(vSphere*textureArrayList.get(tex_index).getSizeY()));
+		bSphere = textureArrayList.get(tex_index).getBlue((int)(uSphere*textureArrayList.get(tex_index).getSizeX()),
+																 (int)(vSphere*textureArrayList.get(tex_index).getSizeY()));
+		
+	}
 
 	// view dependend precalculation dependend on type of mesh shading
 	// vertexNormals for phong and gouraud shading
@@ -629,6 +621,8 @@ public class Raytracer00 implements IRayTracerImplementation {
 					}
 					break;
 
+				case 't':
+				case 'T':
 				case 'p':
 				case 'P':
 				case 'g':
@@ -965,8 +959,8 @@ public class Raytracer00 implements IRayTracerImplementation {
 
 
 
-	//Verwendet die Farben der Textur für die I_Sphere-Objekte
-	private Color phongIlluminate2(float materialN, float[] l, float[] n, float[] v, float[] Ia, float[] Ids) {
+	//Verwendet die Farben der Textur für die I_Sphere-Objekte und Kugel3mitT T_Mesh-Objekt
+	private Color phongIlluminateUsingTexture(float materialN, float[] l, float[] n, float[] v, float[] Ia, float[] Ids) {
 		float ir = 0, ig = 0, ib = 0; // reflected intensity, rgb channels
 		float[] r = new float[3]; // reflection vector
 		float ln, rv; // scalar products <l,n> and <r,v>
