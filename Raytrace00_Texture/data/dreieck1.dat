@@ -2,7 +2,7 @@
 TRIANGLE_MESH
 
 # Dateiinformationen
-3 1 1 f
+3 1 1 f 1
 
 # Materialien
 #  ambient      diffuse        specular    n
@@ -15,3 +15,5 @@ TRIANGLE_MESH
 -1.0 -0.5 -3.0 0
 # Dreiecke
 0 1 2
+# TextureId
+0

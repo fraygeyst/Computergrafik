@@ -375,7 +375,8 @@ public class Raytracer00 implements IRayTracerImplementation {
 						//						minN[0] = n[0];
 						//						minN[1] = n[1]; 
 						//						minN[2] = n[2];
-						//
+						//Texture
+						//textureMapping(minN, mesh.tex_index);
 						//						// the material is the material of the first triangle point 
 						//						int matIndex = mesh.verticesMat[mesh.triangles[minIndex][0]];
 						//						minMaterial = mesh.materials[matIndex]; 
@@ -461,7 +462,8 @@ public class Raytracer00 implements IRayTracerImplementation {
 		if (objects.get(minObjectsIndex) instanceof I_Sphere)
 			//fuer Texture
 			return phongIlluminateUsingTexture(minMaterialN, l, minN, v, Ia, Ids);
-
+		
+			//return phongIlluminate(minMaterial, minMaterialN, l, minN, v, Ia, Ids);
 		// triangle mesh: flat, gouraud or phong shading according to file data
 		else if (objects.get(minObjectsIndex).getHeader() == "TRIANGLE_MESH") {
 			mesh = ((T_Mesh) objects.get(minObjectsIndex));
@@ -477,6 +479,10 @@ public class Raytracer00 implements IRayTracerImplementation {
 				//				return phongIlluminate(minMaterial, minMaterialN, l, minN, v, Ia, Ids);
 				// lookup triangle color of triangle hit
 				//System.out.println(mesh.triangleColors[minIndex][0] +","+ mesh.triangleColors[minIndex][1]+","+ mesh.triangleColors[minIndex][2]);
+				
+				//Texture
+				//return new Color(rSphere, gSphere , bSphere);
+				
 				return new Color(mesh.triangleColors[minIndex][0], mesh.triangleColors[minIndex][1], mesh.triangleColors[minIndex][2]);
 			case 'g':
 			case 'G':
@@ -490,6 +496,7 @@ public class Raytracer00 implements IRayTracerImplementation {
 				colorf[2] = bu * mesh.vertexColors[mesh.triangles[minIndex][2]][2] + bv * mesh.vertexColors[mesh.triangles[minIndex][0]][2] + bw
 						* mesh.vertexColors[mesh.triangles[minIndex][1]][2];
 
+				
 				return new Color(colorf[0] < 1.0f ? colorf[0] : 1.0f, colorf[1] < 1.0f ? colorf[1] : 1.0f, colorf[2] < 1.0f ? colorf[2] : 1.0f);
 			case 'p':
 			case 'P':
@@ -512,7 +519,9 @@ public class Raytracer00 implements IRayTracerImplementation {
 
 	private void textureMapping(float minN[], int tex_index) {
 		// Texturing
-		this.uSphere = (float) (0.5 +( Math.atan2(minN[2], minN[0]) / (2 *Math.PI)));
+		//this.uSphere = 1- (float) (0.5 +(( Math.atan2(minN[2], minN[0])-Math.toRadians(180.0)) / (2 *Math.PI))); //mit drehung
+		//this.uSphere = 1- (float) (0.5 +(Math.atan2(minN[2], minN[0]) / (2 *Math.PI)));
+		this.uSphere = (float) (0.5 +(Math.atan2(minN[2], minN[0]) / (2 *Math.PI))); //gespiegelt
 		this.vSphere= (float) (0.5 - (Math.asin(minN[1])/Math.PI));
 
 		//wenn ein bestimmter Wert gesetzt ist, wird die Texture für ALLE I_Spheres übernommen.
