@@ -2,7 +2,7 @@
 TRIANGLE_MESH
 
 # Dateiinformationen
-602 1200 1 p 1
+602 1200 1 t 1
 
 # Materialien
 #  ambient      diffuse        specular    n
@@ -1813,5 +1813,5 @@ TRIANGLE_MESH
 601 598 597
 601 599 598
 601 575 599
-#TextureID
+# TextureID
 2

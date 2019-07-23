@@ -26,8 +26,6 @@ public class T_Mesh extends RT_Object {
 	public float[] triangleAreas;
 
 	// Neu für Textur
-	public float []u;
-	public float []v;
 	public int tex_index;
 
 	@Override
@@ -45,21 +43,19 @@ public class T_Mesh extends RT_Object {
 		Pattern pTriangle = Pattern.compile(triangleRegex);
 
 		//Fuer Texture
-		Pattern pUV = Pattern.compile(uvRegex);
 		Pattern pTextureID = Pattern.compile(textureRegex);
 
 		Matcher matcher = pInfo.matcher(readLine(br));
 		if(!matcher.matches())
 			throw new IOException("Ungültiges Dateiformat!");
 
-		int nExpVerts, nExpTriangles, nExpMaterials, nExpUV, nExpTextureID;
+		int nExpVerts, nExpTriangles, nExpMaterials, nExpTextureID;
 		nExpVerts = Integer.parseInt(matcher.group(1));
 		nExpTriangles = Integer.parseInt(matcher.group(2));
 		nExpMaterials = Integer.parseInt(matcher.group(3));
 
 		//Fuer Texture
-		nExpUV = Integer.parseInt(matcher.group(5));
-		nExpTextureID = Integer.parseInt(matcher.group(6));
+		nExpTextureID = Integer.parseInt(matcher.group(5));
 
 		fgp=matcher.group(4).charAt(0);
 		materials = new float[nExpMaterials][9];	// ar ag ab dr dg db sr sg sb
@@ -68,9 +64,7 @@ public class T_Mesh extends RT_Object {
 		verticesMat = new int[nExpVerts];			// Materialindex
 		triangles = new int[nExpTriangles][3];		// i1 i2 i3
 
-		//fuer Texture
-		u = new float[nExpUV];
-		v = new float[nExpUV];
+
 
 		// Materialien lesen
 		for(int i = 0; i < nExpMaterials; ++i) {
@@ -105,22 +99,13 @@ public class T_Mesh extends RT_Object {
 				triangles[i][j] = Integer.parseInt(matcher.group(j+1));
 		}
 
-		// UV lesen
-		for(int i = 0; i < nExpUV; i++) {
-			matcher = pUV.matcher(readLine(br).trim());
-			if(!matcher.matches())
-				throw new IOException("Ungültiges Dateiformat! " + br.getLineNumber());
-
-			u[i] = Float.parseFloat(matcher.group(1));
-			v[i] = Float.parseFloat(matcher.group(2));
-		}
 
 		//textureId einlesen
 		for(int i = 0; i < nExpTextureID; i++) {
 			matcher = pTextureID.matcher(readLine(br).trim());
 			if(!matcher.matches())
 				throw new IOException("Ungültiges Dateiformat! " + br.getLineNumber());
-			tex_index= Integer.parseInt(matcher.group(1));
+			tex_index = Integer.parseInt(matcher.group(1));
 		}
 		
 
@@ -150,7 +135,7 @@ public class T_Mesh extends RT_Object {
 
 
 	private static final String fInfoRegex =
-			"([0-9]*) ([0-9]*) ([0-9]*) ([fgptFGPT]) ([0-9]*) ([0-9]*)";
+			"([0-9]*) ([0-9]*) ([0-9]*) ([fgptFGPT]) ([0-9]*)";
 	private static final String materialRegex =
 			"(\\-?[0-9]+\\.[0-9]+) +(\\-?[0-9]+\\.[0-9]+) +(\\-?[0-9]+\\.[0-9]+) +(\\-?[0-9]+\\.[0-9]+) +(\\-?[0-9]+\\.[0-9]+) +(\\-?[0-9]+\\.[0-9]+) +(\\-?[0-9]+\\.[0-9]+) +(\\-?[0-9]+\\.[0-9]+) +(\\-?[0-9]+\\.[0-9]+) +([0-9]+)";
 	private static final String vertexRegex =
@@ -159,8 +144,6 @@ public class T_Mesh extends RT_Object {
 			"([0-9]+) +([0-9]+) +([0-9]+)";
 
 	//Fuer Texture
-	private static final String uvRegex =
-			"(\\-?[0-9]+\\.[0-9]+) +(\\-?[0-9]+\\.[0-9]+)";
 	private static final String textureRegex =
 			"([0-9]*)";
 }
