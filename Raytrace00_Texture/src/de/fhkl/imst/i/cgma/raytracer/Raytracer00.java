@@ -516,7 +516,7 @@ public class Raytracer00 implements IRayTracerImplementation {
 	}
 
 
-
+	//Textur Mapping
 	private void textureMapping(float minN[], int tex_index) {
 		// Texturing
 		//this.uSphere = 1- (float) (0.5 +(( Math.atan2(minN[2], minN[0])-Math.toRadians(180.0)) / (2 *Math.PI))); //mit drehung
